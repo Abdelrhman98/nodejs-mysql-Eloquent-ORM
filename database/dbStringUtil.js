@@ -6,7 +6,7 @@ var runQr = require('./query')
 var queryBuilder = class{
     constructor(dbTable){
         this.table = dbTable
-        this.selectQr = ""
+        this.currquery = ""
     }
     get getTable(){
         return this.table
@@ -15,21 +15,46 @@ var queryBuilder = class{
         this.table =tableName
     }
     select(select="*", where={},options=""){
-        this.selectQr = "SELECT " + select + " FROM " + this.table 
-        this.selectQr +=(!_.isEmpty(where))?" WHERE ":""
-        var finQur = this.selectQr + sutil.arrayToWhereString(where) + " " +options
+        this.currquery = "SELECT " + select + " FROM " + this.table 
+        this.currquery +=(!_.isEmpty(where))?" WHERE ":""
+        var finQur = this.currquery + sutil.arrayToWhereString(where) + " " +options
         return finQur
     }
 
+    insert(dataValues){
+        this.currquery = "INSERT INTO " + this.table + sutil.getKeyInParkets(dataValues)  + " VALUES " + sutil.getValueInPrakets(dataValues)
+        //console.log(this.currquery)
+        return this.currquery
+    }
+
+    update(updatedObj, whereObj){
+        this.currquery  = "UPDATE " + this.table + " SET " + sutil.makeSettingKeyValString(updatedObj) + " WHERE "
+        var whereStr    = _.isEmpty(whereObj)?" 1 ": sutil.arrayToWhereString(whereObj)
+        this.currquery  += whereStr
+        //console.log(whereStr)
+        //console.log(this.currquery)
+        return this.currquery
+    }
+
+    delete(whereObj){
+        this.currquery = "DELETE FROM " + this.table + " WHERE " ;
+        var whereStr    = _.isEmpty(whereObj)?" 1 ": sutil.arrayToWhereString(whereObj)
+        this.currquery  += whereStr
+        console.log(this.currquery)
+        return this.currquery
+    }
 } 
 
 
 module.exports = queryBuilder
-
-//var test = sutil.arrayToWhereString({id:"123", name:"asdasd"})
+/*
+var test = sutil.makeSettingKeyValString({id:123, name:"asdasd"})
+console.log(test)
+*/
 //console.log(test)
-/*const dbs = new queryBuilder("qada")
-console.log(dbs.select("*"))
+/*
+const dbs = new queryBuilder("qada")
+dbs.delete({id:10,name:"teswwt"})
 */
 
 /*var ret = dbs.arrayToWhereString({id:"123", name:"asdasd"})

@@ -12,11 +12,59 @@ var removeLastGivenString = (str, gString)=>{
 var arrayToWhereString = (where)=>{
     var arrStr = ""
     for(var key in where){
-        arrStr+= key + " = "+ where[key] + " AND "
+        arrStr+= key + " = "+ practify(where[key],"string") + " AND "
     }
     return removeLastGivenString(arrStr,"AND")
+}
+/* ------------------------------------------------------------- *
+||| getKeyInParkets function take object and generating string of 
+||| input => {id:10, name:"test",....etc}
+||| output => ( id , name , ...etc)
+ * ------------------------------------------------------------- */
+var getKeyInParkets = (objKey)=>{
+    var arrStr = " ( "
+    for(var key in objKey)
+        arrStr+= "`"+ key + "` , "
+    arrStr = removeLastGivenString(arrStr,',')
+    arrStr+=")"
+    return arrStr
+}
+
+/* ------------------------------------------------------------- *
+||| getKeyInParkets function take object and generating string of 
+||| input => {id:10, name:"test",....etc}
+||| output => ( id , name , ...etc)
+ * ------------------------------------------------------------- */
+var getValueInPrakets = (objVals)=>{
+    var arrStr = " ( "
+    
+    for(var key in objVals)
+        arrStr+= practify(objVals[key],"string") + " , "
+    arrStr = removeLastGivenString(arrStr,',')
+    arrStr+=")"
+    return arrStr
+}
+
+var practify = (str, type,prepo = "'")=>{
+    if(type != "*")
+        str = (typeof(str) == "string")?prepo+str+prepo:str
+    else 
+        str= prepo+str+prepo
+    return str
+}
+
+var makeSettingKeyValString = (upObj)=>{
+    var updatingStr = ""
+    for(var key in upObj)
+        updatingStr+= practify(key,"*","`") + "=" + practify(upObj[key],"string") + " , "
+    updatingStr = removeLastGivenString(updatingStr,',')
+    return updatingStr
+    //console.log(updatingStr)
 }
 
 module.exports.removeLastSpace          = removeLastSpace
 module.exports.removeLastGivenString    = removeLastGivenString
-module.exports.arrayToWhereString       = arrayToWhereString  
+module.exports.arrayToWhereString       = arrayToWhereString
+module.exports.getKeyInParkets          = getKeyInParkets
+module.exports.getValueInPrakets        = getValueInPrakets
+module.exports.makeSettingKeyValString  = makeSettingKeyValString
