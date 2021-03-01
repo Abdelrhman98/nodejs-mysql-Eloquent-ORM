@@ -1,3 +1,5 @@
+const { get } = require("lodash")
+
 var removeLastSpace = (str)=>{
     return(str[str.length -1] == " ")? str.substr(0,str.length-1):str
 }
@@ -62,9 +64,36 @@ var makeSettingKeyValString = (upObj)=>{
     //console.log(updatingStr)
 }
 
+var repeateGiven = (given, freq)=>{
+    var repatedStr = "";
+    while(freq--)
+        repatedStr+=given
+    return repatedStr
+}
+
+var getKeyName = (obj)=>{
+    var gettingKey = ""
+    for(var key in obj){
+        gettingKey = key
+    }
+    return gettingKey
+}
+
+var getValueName = (obj)=>{
+    var gettingVal = ""
+    for(var key in obj)
+        gettingVal = obj[key]
+    return gettingVal
+}
+
+
 module.exports.removeLastSpace          = removeLastSpace
 module.exports.removeLastGivenString    = removeLastGivenString
 module.exports.arrayToWhereString       = arrayToWhereString
 module.exports.getKeyInParkets          = getKeyInParkets
 module.exports.getValueInPrakets        = getValueInPrakets
 module.exports.makeSettingKeyValString  = makeSettingKeyValString
+module.exports.repeateGiven             = repeateGiven
+module.exports.getKeyName               = getKeyName
+module.exports.getValueName             = getValueName
+
